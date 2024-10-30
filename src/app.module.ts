@@ -32,11 +32,11 @@ import { SocketModule } from './socket/socket.module'
 @Module({
   imports: [
     ConfigModule.forRoot({
-      isGlobal: true,
-      expandVariables: true,
+      isGlobal: true, // 全局模块，其他模块不用再imports: [ConfigModule]来使用
+      expandVariables: true, // 是否展开变量
       // 指定多个 env 文件时，第一个优先级最高
       envFilePath: ['.env.local', `.env.${process.env.NODE_ENV}`, '.env'],
-      load: [...Object.values(config)],
+      load: [...Object.values(config)], // 加载自定义配置文件
     }),
     // 启用 CLS 上下文
     ClsModule.forRoot({

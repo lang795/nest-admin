@@ -37,7 +37,8 @@ async function bootstrap() {
     },
   )
 
-  // 获取配置服务
+  // 配置名称空间
+  // 这里与其他地方使用无关，只是为了bootstrap函数中的configService.get('app', { infer: true })能够获取到类型
   const configService = app.get(ConfigService<ConfigKeyPaths>)
 
   const { port, globalPrefix } = configService.get('app', { infer: true })
