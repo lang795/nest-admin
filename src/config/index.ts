@@ -24,6 +24,7 @@ export interface AllConfigType {
   [ossRegToken]: IOssConfig
 }
 
+// RecordNamePaths 用于获取配置的键路径
 export type ConfigKeyPaths = RecordNamePaths<AllConfigType>
 
 export default {

@@ -4,29 +4,32 @@ import { FastifyAdapter } from '@nestjs/platform-fastify'
 
 const app: FastifyAdapter = new FastifyAdapter({
   // @see https://www.fastify.io/docs/latest/Reference/Server/#trustproxy
-  trustProxy: true,
-  logger: false,
+  trustProxy: true, // 信任代理
+  logger: false, // 禁用日志
   // forceCloseConnections: true,
 })
 export { app as fastifyApp }
 
+// 配置multipart/form-data类型请求，文件上传
 app.register(FastifyMultipart, {
   limits: {
-    fields: 10, // Max number of non-file fields
-    fileSize: 1024 * 1024 * 6, // limit size 6M
-    files: 5, // Max number of file fields
+    fields: 10, // 非文件字段的最大数目
+    fileSize: 1024 * 1024 * 6, // 单个文件大小限制
+    files: 5, // 文件最大数
   },
 })
 
+// 配置cookie规则
 app.register(FastifyCookie, {
-  secret: 'cookie-secret', // 这个 secret 不太重要，不存鉴权相关，无关紧要
+  secret: 'cookie-secret', // cookie加密密钥
 })
 
+// 配置请求拦截器
 app.getInstance().addHook('onRequest', (request, reply, done) => {
   // set undefined origin
   const { origin } = request.headers
   if (!origin)
-    request.headers.origin = request.headers.host
+    request.headers.origin = request.headers.host // 解决cors跨域问题，让请求来源和主机地址一致
 
   // forbidden php
 

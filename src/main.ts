@@ -26,16 +26,18 @@ import { LoggerService } from './shared/logger/logger.service'
 declare const module: any
 
 async function bootstrap() {
+  // fastifyApp 是一个 FastifyAdapter 实例，配置底层http服务器使用fastify方案适配器
   const app = await NestFactory.create<NestFastifyApplication>(
     AppModule,
     fastifyApp,
     {
-      bufferLogs: true,
-      snapshot: true,
-      // forceCloseConnections: true,
+      bufferLogs: true, // 缓冲日志 应用程序会在启动过程中将日志消息缓冲起来，而不是立即输出。 提高启动性能
+      snapshot: true, // 快照
+      // forceCloseConnections: true, // 服务关闭强制关闭连接
     },
   )
 
+  // 获取配置服务
   const configService = app.get(ConfigService<ConfigKeyPaths>)
 
   const { port, globalPrefix } = configService.get('app', { infer: true })
