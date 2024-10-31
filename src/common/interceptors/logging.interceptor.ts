@@ -7,6 +7,7 @@ import {
 } from '@nestjs/common'
 import { Observable, tap } from 'rxjs'
 
+// 接口请求响应日志拦截器
 @Injectable()
 export class LoggingInterceptor implements NestInterceptor {
   private logger = new Logger(LoggingInterceptor.name, { timestamp: false })

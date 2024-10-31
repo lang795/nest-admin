@@ -43,30 +43,37 @@ async function bootstrap() {
 
   const { port, globalPrefix } = configService.get('app', { infer: true })
 
-  // class-validator 的 DTO 类中注入 nest 容器的依赖 (用于自定义验证器)
+  // class-validator DTO类中注入 nest 容器的依赖 (用于自定义验证器)，即能使用class-validator的IsInt这些装饰器进行参数等的验证
+  // 把所有接口的参数，都用用class形式的DTO来接收，然后在DTO中使用class-validator的装饰器来验证参数
   useContainer(app.select(AppModule), { fallbackOnErrors: true })
 
+  // 允许跨域
   app.enableCors({ origin: '*', credentials: true })
+  // 设置api全局前缀
   app.setGlobalPrefix(globalPrefix)
+  // 静态资源目录
   app.useStaticAssets({ root: path.join(__dirname, '..', 'public') })
   // Starts listening for shutdown hooks
+  // 程序退出时，会执行这个钩子函数，可以用来做一些清理工作，正确地释放资源
   !isDev && app.enableShutdownHooks()
 
   if (isDev) {
+    // 全局拦截器
     app.useGlobalInterceptors(new LoggingInterceptor())
   }
 
+  // 全局管道
   app.useGlobalPipes(
     new ValidationPipe({
-      transform: true,
-      whitelist: true,
-      transformOptions: { enableImplicitConversion: true },
+      transform: true, // 自动转换传入的参数类型
+      whitelist: true, // 只允许通过验证的参数传入
+      transformOptions: { enableImplicitConversion: true }, // 启用隐式类型转换
       // forbidNonWhitelisted: true, // 禁止 无装饰器验证的数据通过
-      errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY,
-      stopAtFirstError: true,
-      exceptionFactory: errors =>
+      errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY, // 错误状态码
+      stopAtFirstError: true, // 在第一个验证错误时停止验证，而不是验证所有字段
+      exceptionFactory: errors => // 自定义错误信息
         new UnprocessableEntityException(
-          errors.map((e) => {
+          errors.map((e) => { // 取出第一个错误信息
             const rule = Object.keys(e.constraints!)[0]
             const msg = e.constraints![rule]
             return msg
@@ -75,6 +82,7 @@ async function bootstrap() {
     }),
   )
 
+  // 使用redis适配器
   app.useWebSocketAdapter(new RedisIoAdapter(app))
 
   setupSwagger(app, configService)

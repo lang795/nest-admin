@@ -17,27 +17,30 @@ import { RedisPubSubService } from './subpub.service'
 const providers: Provider[] = [
   CacheService,
   {
-    provide: REDIS_PUBSUB,
-    useFactory: (configService: ConfigService<ConfigKeyPaths>) => {
+    // 注入 RedisSubPub 发布订阅 服务
+    provide: REDIS_PUBSUB, // 自定义提供器标记名
+    useFactory: (configService: ConfigService<ConfigKeyPaths>) => { // 工厂函数，动态创建 RedisSubPub 实例
       const redisOptions: RedisOptions = configService.get<IRedisConfig>('redis')
       return new RedisSubPub(redisOptions)
     },
-    inject: [ConfigService],
+    inject: [ConfigService], // 注入提供器，作为参数传递给工厂函数
   },
   RedisPubSubService,
   {
+    // 注入 Redis 服务
     provide: REDIS_CLIENT,
     useFactory: (redisService: RedisService) => {
       return redisService.getOrThrow()
     },
-    inject: [RedisService], // 注入 RedisService
+    inject: [RedisService],
   },
 ]
 
+// RedisModule 为全局模块
 @Global()
 @Module({
   imports: [
-    // cache
+    // cache 异步配置缓存模块
     CacheModule.registerAsync({
       imports: [ConfigModule],
       useFactory: (configService: ConfigService<ConfigKeyPaths>) => {
@@ -52,7 +55,7 @@ const providers: Provider[] = [
       },
       inject: [ConfigService],
     }),
-    // redis
+    // redis 异步配置redis模块
     NestRedisModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: (configService: ConfigService<ConfigKeyPaths>) => ({
