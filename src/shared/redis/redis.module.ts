@@ -14,6 +14,11 @@ import { REDIS_PUBSUB } from './redis.constant'
 import { RedisSubPub } from './redis-subpub'
 import { RedisPubSubService } from './subpub.service'
 
+// imports中导入RedisModule异步配置并创建redis实例（也就是RedisService实例）
+// providers中动态创建提供者，使用依赖注入的方式自动解析注入RedisService服务实例，并用REDIS_CLIENT标记
+// 标记RedisModule为全局模块，提供者可以在全局范围内使用
+// 将REDIS_CLIENT标记对应的服务实例，也创建为一个装饰器InjectRedis，其他模块可以使用InjectRedis装饰器注入redis实例
+
 const providers: Provider[] = [
   CacheService,
   {
@@ -27,7 +32,7 @@ const providers: Provider[] = [
   },
   RedisPubSubService,
   {
-    // 注入 Redis 服务
+    // 把Redis服务实例注入到名为REDIS_CLIENT的服务中，使用依赖注入的方式自动解析注入redis实例，并用REDIS_CLIENT标记
     provide: REDIS_CLIENT,
     useFactory: (redisService: RedisService) => {
       return redisService.getOrThrow()
@@ -40,7 +45,7 @@ const providers: Provider[] = [
 @Global()
 @Module({
   imports: [
-    // cache 异步配置缓存模块
+    // cache 异步配置-创建缓存模块
     CacheModule.registerAsync({
       imports: [ConfigModule],
       useFactory: (configService: ConfigService<ConfigKeyPaths>) => {
@@ -55,7 +60,7 @@ const providers: Provider[] = [
       },
       inject: [ConfigService],
     }),
-    // redis 异步配置redis模块
+    // redis 异步配置-创建redis module，这里面包含了 RedisService的提供器
     NestRedisModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: (configService: ConfigService<ConfigKeyPaths>) => ({

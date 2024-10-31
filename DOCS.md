@@ -8,3 +8,9 @@
 - imports 导出此模块所需的提供程序的导入模块（也就是module）列表，实际是导入module的exorpts导出的提供者
 - exports 这个模块提供的 providers 的子集应该在导入这个模块的其他模块中可用。你可以使用提供器本身或仅使用其令牌（provide 值）（导出的必须是当前module的imports导入的或者providers提供的）
 - forRoot() 方法可以同步或异步（即通过 Promise）返回动态模块。
+
+## redis流程
+- imports中导入RedisModule异步配置并创建redis实例（也就是RedisService实例）
+- providers中动态创建提供者，使用依赖注入的方式自动解析注入RedisService服务实例，并用REDIS_CLIENT标记
+- 标记RedisModule为全局模块，提供者可以在全局范围内使用
+- 将REDIS_CLIENT标记对应的服务实例，也创建为一个装饰器InjectRedis，其他模块可以使用InjectRedis装饰器注入redis实例
