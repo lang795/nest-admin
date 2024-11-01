@@ -23,7 +23,7 @@ export function setupSwagger(
     .setDescription(`${name} API document`)
     .setVersion('1.0')
 
-  // auth security
+  // auth security 身份验证配置
   documentBuilder.addSecurity(API_SECURITY_AUTH, {
     description: '输入令牌（Enter the token）',
     type: 'http',
@@ -32,8 +32,8 @@ export function setupSwagger(
   })
 
   const document = SwaggerModule.createDocument(app, documentBuilder.build(), {
-    ignoreGlobalPrefix: false,
-    extraModels: [CommonEntity, ResOp, Pagination, TreeResult],
+    ignoreGlobalPrefix: false, // 忽略全局前缀
+    extraModels: [CommonEntity, ResOp, Pagination, TreeResult], // 额外模型
   })
 
   SwaggerModule.setup(path, app, document, {

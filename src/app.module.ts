@@ -38,7 +38,7 @@ import { SocketModule } from './socket/socket.module'
       envFilePath: ['.env.local', `.env.${process.env.NODE_ENV}`, '.env'],
       load: [...Object.values(config)], // 加载自定义配置文件
     }),
-    // 启用 CLS 上下文
+    // 启用 CLS 上下文 ClsModule 是一个用于在 NestJS 应用中管理上下文局部存储（Context Local Storage）的模块。它通常用于在请求生命周期内共享数据，例如用户信息、请求 ID 等。
     ClsModule.forRoot({
       global: true,
       // https://github.com/Papooch/nestjs-cls/issues/92
@@ -53,8 +53,8 @@ import { SocketModule } from './socket/socket.module'
         },
       },
     }),
-    SharedModule,
-    DatabaseModule,
+    SharedModule, // 共享模块
+    DatabaseModule, // 异步配置TypeORM模块，数据库连接初始化
 
     AuthModule,
     SystemModule,

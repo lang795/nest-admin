@@ -38,6 +38,7 @@ const strategies = [LocalStrategy, JwtStrategy]
   imports: [
     TypeOrmModule.forFeature([AccessTokenEntity, RefreshTokenEntity]),
     PassportModule,
+    // 异步配置JwtModule
     JwtModule.registerAsync({
       imports: [ConfigModule],
       useFactory: (configService: ConfigService<ConfigKeyPaths>) => {

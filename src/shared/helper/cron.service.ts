@@ -9,6 +9,7 @@ import { CronOnce } from '~/common/decorators/cron-once.decorator'
 import { ConfigKeyPaths } from '~/config'
 import { AccessTokenEntity } from '~/modules/auth/entities/access-token.entity'
 
+// 计划任务，每天凌晨清除过期的 token
 @Injectable()
 export class CronService {
   private logger: Logger = new Logger(CronService.name)
@@ -16,6 +17,7 @@ export class CronService {
     private readonly configService: ConfigService<ConfigKeyPaths>,
   ) {}
 
+  // 调度装饰器
   @CronOnce(CronExpression.EVERY_DAY_AT_MIDNIGHT)
   async deleteExpiredJWT() {
     this.logger.log('--> 开始扫表，清除过期的 token')

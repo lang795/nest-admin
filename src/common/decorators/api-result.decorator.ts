@@ -14,7 +14,7 @@ function genBaseProp(type: Type<any>) {
 }
 
 /**
- * @description: 生成返回结果装饰器
+ * @description: 生成返回结果的swagger装饰器
  */
 export function ApiResult<TModel extends Type<any>>({
   type,
@@ -27,6 +27,7 @@ export function ApiResult<TModel extends Type<any>>({
 }) {
   let prop = null
 
+  // 判断返回值类型是否为数组，type还是只有一项
   if (Array.isArray(type)) {
     if (isPage) {
       prop = {
@@ -65,6 +66,7 @@ export function ApiResult<TModel extends Type<any>>({
 
   const model = Array.isArray(type) ? type[0] : type
 
+  // 整合装饰器
   return applyDecorators(
     ApiExtraModels(model),
     (

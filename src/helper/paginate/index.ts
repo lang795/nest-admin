@@ -136,6 +136,7 @@ export async function paginate<T>(
   options: IPaginationOptions,
 ): Promise<Pagination<T>>
 
+// 封装返回数据接口处理
 export async function paginate<T extends ObjectLiteral>(
   repositoryOrQueryBuilder: Repository<T> | SelectQueryBuilder<T>,
   options: IPaginationOptions,

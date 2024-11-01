@@ -85,9 +85,11 @@ async function bootstrap() {
   // 使用redis适配器
   app.useWebSocketAdapter(new RedisIoAdapter(app))
 
+  // 配置swagger
   setupSwagger(app, configService)
 
   await app.listen(port, '0.0.0.0', async () => {
+    // 自定义日志服务
     app.useLogger(app.get(LoggerService))
     const url = await app.getUrl()
     const { pid } = process
