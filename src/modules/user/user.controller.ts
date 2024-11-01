@@ -37,7 +37,7 @@ export class UserController {
   @ApiOperation({ summary: '获取用户列表' })
   @ApiResult({ type: [UserEntity], isPage: true })
   @Perm(permissions.LIST)
-  async list(@Query() dto: UserQueryDto) {
+  async list(@Query() dto: UserQueryDto) { // /users/list get
     return this.userService.list(dto)
   }
 
