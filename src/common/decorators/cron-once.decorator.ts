@@ -4,6 +4,7 @@ import { Cron } from '@nestjs/schedule'
 
 import { isMainProcess } from '~/global/env'
 
+// 调度计划，只在主进程执行
 export const CronOnce: typeof Cron = (...rest): MethodDecorator => {
   // If not in cluster mode, and PM2 main worker
   if (isMainProcess)

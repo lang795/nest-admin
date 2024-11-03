@@ -17,6 +17,7 @@ const providers = [EntityExistConstraint, UniqueConstraint]
 
 @Module({
   imports: [
+    // 异步配置TypeORM模块，数据库连接初始化
     TypeOrmModule.forRootAsync({
       inject: [ConfigService],
       useFactory: (configService: ConfigService<ConfigKeyPaths>) => {

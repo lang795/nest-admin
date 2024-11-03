@@ -12,6 +12,7 @@ import { MailerModule } from './mailer/mailer.module'
 
 import { RedisModule } from './redis/redis.module'
 
+// 主要实例化一些全局的功能共享服务
 @Global()
 @Module({
   imports: [
@@ -41,7 +42,7 @@ import { RedisModule } from './redis/redis.module'
     RedisModule,
     // mailer 邮件服务
     MailerModule,
-    // helper
+    // helper 辅助服务
     HelperModule,
   ],
   exports: [HttpModule, MailerModule, RedisModule, HelperModule],

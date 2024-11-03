@@ -33,8 +33,8 @@ export function setupSwagger(
   })
 
   const document = SwaggerModule.createDocument(app, documentBuilder.build(), {
-    ignoreGlobalPrefix: false,
-    extraModels: [CommonEntity, ResOp, Pagination, TreeResult],
+    ignoreGlobalPrefix: false, // 忽略全局前缀
+    extraModels: [CommonEntity, ResOp, Pagination, TreeResult], // 额外模型
   })
 
   SwaggerModule.setup(path, app, document, {
