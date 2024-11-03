@@ -37,8 +37,8 @@ export class TaskService implements OnModuleInit {
 
   constructor(
     @InjectRepository(TaskEntity)
-    private taskRepository: Repository<TaskEntity>,
-    @InjectQueue(SYS_TASK_QUEUE_NAME) private taskQueue: Queue,
+    private taskRepository: Repository<TaskEntity>, // 获取任务列表数据库表的操作实例
+    @InjectQueue(SYS_TASK_QUEUE_NAME) private taskQueue: Queue, // 定时任务队列，用于添加任务
     private moduleRef: ModuleRef,
     private reflector: Reflector,
     @InjectRedis() private redis: Redis,
@@ -200,6 +200,7 @@ export class TaskService implements OnModuleInit {
     if (task.limit > 0)
       repeat.limit = task.limit
 
+    // 向任务队列里添加任务
     const job = await this.taskQueue.add(
       { id: task.id, service: task.service, args: task.data },
       { jobId: task.id, removeOnComplete: true, removeOnFail: true, repeat },

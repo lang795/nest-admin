@@ -32,7 +32,7 @@ export class RegisterDto {
 
   @ApiProperty({ description: '密码' })
   @IsString()
-  @Matches(/^\S*(?=\S{6})(?=\S*\d)(?=\S*[A-Z])\S*$/i)
+  @Matches(/^\S*(?=\S{6})(?=\S*\d)(?=\S*[A-Z])\S*$/i, { message: '密码要包含字母数字和特殊字符' })
   @MinLength(6)
   @MaxLength(16)
   password: string

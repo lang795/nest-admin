@@ -46,7 +46,7 @@ export class HealthController {
   @HealthCheck()
   @Perm(PermissionHealth.MH)
   async checkMemoryHeap() {
-    // the process should not use more than 200MB memory
+    // 该进程不应使用超过200MB的内存
     return this.memory.checkHeap('memory-heap', 200 * 1024 * 1024)
   }
 
@@ -54,7 +54,7 @@ export class HealthController {
   @HealthCheck()
   @Perm(PermissionHealth.MR)
   async checkMemoryRSS() {
-    // the process should not have more than 200MB RSS memory allocated
+    // 进程分配的RSS内存不应超过200MB
     return this.memory.checkRSS('memory-rss', 200 * 1024 * 1024)
   }
 
@@ -63,7 +63,7 @@ export class HealthController {
   @Perm(PermissionHealth.DISK)
   async checkDisk() {
     return this.disk.checkStorage('disk', {
-      // The used disk storage should not exceed 75% of the full disk size
+      // 已用磁盘存储空间不应超过磁盘已满空间的75%
       thresholdPercent: 0.75,
       path: '/',
     })

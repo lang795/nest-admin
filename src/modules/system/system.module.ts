@@ -32,7 +32,7 @@ const modules = [
 @Module({
   imports: [
     ...modules,
-    RouterModule.register([
+    RouterModule.register([ // 指定所有modules都统一加上/system路由前缀
       {
         path: 'system',
         module: SystemModule,

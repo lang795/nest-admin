@@ -28,7 +28,7 @@ import { LocalStrategy } from './strategies/local.strategy'
 const controllers = [
   AuthController,
   AccountController,
-  CaptchaController,
+  CaptchaController, // 验证码
   EmailController,
 ]
 const providers = [AuthService, TokenService, CaptchaService]
@@ -36,9 +36,9 @@ const strategies = [LocalStrategy, JwtStrategy]
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([AccessTokenEntity, RefreshTokenEntity]),
-    PassportModule,
-    JwtModule.registerAsync({
+    TypeOrmModule.forFeature([AccessTokenEntity, RefreshTokenEntity]), // 注册实体
+    PassportModule, // 注册 Passport 身份验证 模块
+    JwtModule.registerAsync({ // 注册 JWT 模块 并配置
       imports: [ConfigModule],
       useFactory: (configService: ConfigService<ConfigKeyPaths>) => {
         const { jwtSecret, jwtExprire }
@@ -54,7 +54,7 @@ const strategies = [LocalStrategy, JwtStrategy]
       },
       inject: [ConfigService],
     }),
-    UserModule,
+    UserModule, // 这些模块中的提供者在controllers中使用
     RoleModule,
     MenuModule,
     LogModule,

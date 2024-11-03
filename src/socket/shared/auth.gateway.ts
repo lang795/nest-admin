@@ -40,6 +40,7 @@ export function createAuthGateway(options: AuthGatewayOptions): new (...args: an
     @WebSocketServer()
     protected namespace: Namespace
 
+    // 格式化认证报错，并关闭连接
     async authFailed(client: Socket) {
       client.send(
         this.gatewayMessageFormat(BusinessEvents.AUTH_FAILED, '认证失败'),
@@ -47,6 +48,7 @@ export function createAuthGateway(options: AuthGatewayOptions): new (...args: an
       client.disconnect()
     }
 
+    // 验证token是否有效
     async authToken(token: string): Promise<boolean> {
       if (typeof token !== 'string')
         return false
@@ -68,6 +70,7 @@ export function createAuthGateway(options: AuthGatewayOptions): new (...args: an
       return await validJwt()
     }
 
+    // 连接成功，验证token，保存token和socketId的映射
     async handleConnection(client: Socket) {
       const token
         = client.handshake.query.token
@@ -85,12 +88,14 @@ export function createAuthGateway(options: AuthGatewayOptions): new (...args: an
       this.tokenSocketIdMap.set(token.toString(), sid)
     }
 
+    // 断开连接
     handleDisconnect(client: Socket) {
       super.handleDisconnect(client)
     }
 
     tokenSocketIdMap = new Map<string, string>()
 
+    // token过期，断开连接，emitter订阅
     @OnEvent(EventBusEvents.TokenExpired)
     handleTokenExpired(token: string) {
       // consola.debug(`token expired: ${token}`)
@@ -100,6 +105,7 @@ export function createAuthGateway(options: AuthGatewayOptions): new (...args: an
       if (!sid)
         return false
 
+      // 获取socket实例
       const socket = server.of(`/${namespace}`).sockets.get(sid)
       if (socket) {
         socket.disconnect()
@@ -109,6 +115,7 @@ export function createAuthGateway(options: AuthGatewayOptions): new (...args: an
       return false
     }
 
+    // 广播消息，emitter发送消息
     override broadcast(event: BusinessEvents, data: any) {
       this.cacheService.emitter.of(`/${namespace}`).emit('message', this.gatewayMessageFormat(event, data))
     }

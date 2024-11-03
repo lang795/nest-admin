@@ -33,6 +33,7 @@ export class AuthService {
     @Inject(AppConfig.KEY) private appConfig: IAppConfig,
   ) {}
 
+  // 验证用户名密码，返回用户信息
   async validateUser(credential: string, password: string): Promise<any> {
     const user = await this.userService.findUserByUserName(credential)
 
@@ -140,6 +141,7 @@ export class AuthService {
     return this.menuService.getPermissions(uid)
   }
 
+  // 获取用户权限缓存
   async getPermissionsCache(uid: number): Promise<string[]> {
     const permissionString = await this.redis.get(genAuthPermKey(uid))
     return permissionString ? JSON.parse(permissionString) : []

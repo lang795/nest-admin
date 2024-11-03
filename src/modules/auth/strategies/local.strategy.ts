@@ -5,6 +5,7 @@ import { Strategy } from 'passport-local'
 import { AuthStrategy } from '../auth.constant'
 import { AuthService } from '../auth.service'
 
+// 验证用户名密码
 @Injectable()
 export class LocalStrategy extends PassportStrategy(
   Strategy,
@@ -12,7 +13,7 @@ export class LocalStrategy extends PassportStrategy(
 ) {
   constructor(private authService: AuthService) {
     super({
-      usernameField: 'credential',
+      usernameField: 'credential', // 指定传入的字段名
       passwordField: 'password',
     })
   }

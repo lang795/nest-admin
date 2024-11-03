@@ -23,6 +23,7 @@ export function setupSwagger(
     .setDescription(`${name} API document`)
     .setVersion('1.0')
 
+  // 安全认证规则，需要在请求头中添加token，根据API_SECURITY_AUTH创建装饰器在controller中使用
   // auth security
   documentBuilder.addSecurity(API_SECURITY_AUTH, {
     description: '输入令牌（Enter the token）',

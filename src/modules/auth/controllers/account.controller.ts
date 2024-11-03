@@ -18,8 +18,9 @@ import { JwtAuthGuard } from '../guards/jwt-auth.guard'
 
 @ApiTags('Account - 账户模块')
 @ApiSecurityAuth()
-@ApiExtraModels(AccountInfo)
-@UseGuards(JwtAuthGuard)
+@ApiExtraModels(AccountInfo) // 显示的将模型类放到swagger中
+// 同时策略会在request.user上挂token的用户信息，@AuthUser()装饰器用于获取到user信息，后续接口使用uid进行操作
+@UseGuards(JwtAuthGuard) // 应用守卫，验证token，请求这个controller下的接口都需要验证token
 @Controller('account')
 export class AccountController {
   constructor(
@@ -30,7 +31,8 @@ export class AccountController {
   @Get('profile')
   @ApiOperation({ summary: '获取账户资料' })
   @ApiResult({ type: AccountInfo })
-  @AllowAnon()
+  @AllowAnon() // 不需要检测是否有操作权限
+  // AuthUser 装饰器中获取了身份验证模块，策略返回的身份信息，request.user
   async profile(@AuthUser() user: IAuthUser): Promise<AccountInfo> {
     return this.userService.getAccountInfo(user.uid)
   }

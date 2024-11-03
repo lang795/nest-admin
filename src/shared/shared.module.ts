@@ -21,7 +21,7 @@ import { RedisModule } from './redis/redis.module'
     HttpModule,
     // schedule
     ScheduleModule.forRoot(),
-    // rate limit
+    // rate limit 针对全局的限流
     ThrottlerModule.forRoot([
       {
         limit: 20,
@@ -39,7 +39,7 @@ import { RedisModule } from './redis/redis.module'
     }),
     // redis
     RedisModule,
-    // mailer
+    // mailer 邮件服务
     MailerModule,
     // helper
     HelperModule,

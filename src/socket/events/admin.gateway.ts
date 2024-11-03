@@ -28,6 +28,7 @@ export class AdminEventsGateway
     super(jwtService, authService, cacheService)
   }
 
+  // websocket服务器对象
   @WebSocketServer()
   protected _server: Server
 

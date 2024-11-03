@@ -14,7 +14,7 @@ function genBaseProp(type: Type<any>) {
 }
 
 /**
- * @description: 生成返回结果装饰器
+ * @description: 用于swagger显示---生成返回结果装饰器，没有使用返回值装饰器没有return的就是返回data:null
  */
 export function ApiResult<TModel extends Type<any>>({
   type,

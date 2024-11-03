@@ -11,8 +11,10 @@ import { PERMISSION_KEY } from '../auth.constant'
    [K in keyof P]: K extends string ? `${T}:${P[K]}` : never
  }
 
-/** 资源操作需要特定的权限 */
+/** 资源操作需要特定的权限，通过在RbacGuard守卫中进行验证 */
 export function Perm(permission: string | string[]) {
+  // SetMetadata 是 NestJS 提供的一个装饰器，用于将元数据附加到类或方法上。
+  // PERMISSION_KEY 是元数据的键，通常是一个常量字符串。permission 是元数据的值，表示特定的权限。
   return applyDecorators(SetMetadata(PERMISSION_KEY, permission))
 }
 
@@ -35,6 +37,7 @@ let permissions: string[] = []
  */
 export function definePermission<T extends string, U extends Record<string, string>>(modulePrefix: T, actionMap: U): AddPrefixToObjectValue<T, U>
 export function definePermission<T extends string, U extends ReadonlyArray<string>>(modulePrefix: T, actions: U): TupleToObject<T, U>
+// 格式化处理权限列表数据组合
 export function definePermission(modulePrefix: string, actions) {
   if (isPlainObject(actions)) {
     Object.entries(actions).forEach(([key, action]) => {

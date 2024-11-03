@@ -16,7 +16,7 @@ import { ResOp } from '~/common/model/response.model'
 import { BYPASS_KEY } from '../decorators/bypass.decorator'
 
 /**
- * 统一处理接口请求与响应结果，如果不需要则添加 @Bypass 装饰器
+ * 接口真实返回结构，统一处理接口请求与响应结果，如果不需要则添加 @Bypass 装饰器
  */
 @Injectable()
 export class TransformInterceptor implements NestInterceptor {

@@ -14,7 +14,7 @@ import { LoginToken } from './models/auth.model'
 import { CaptchaService } from './services/captcha.service'
 
 @ApiTags('Auth - 认证模块')
-@UseGuards(LocalGuard)
+@UseGuards(LocalGuard) // 查用户名密码的策略，没有使用
 @Public()
 @Controller('auth')
 export class AuthController {

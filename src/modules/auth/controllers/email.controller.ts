@@ -12,7 +12,7 @@ import { Public } from '../decorators/public.decorator'
 import { SendEmailCodeDto } from '../dto/captcha.dto'
 
 @ApiTags('Auth - 认证模块')
-@UseGuards(ThrottlerGuard)
+@UseGuards(ThrottlerGuard) // 节流
 @Controller('auth/email')
 export class EmailController {
   constructor(private mailerService: MailerService) {}
@@ -20,7 +20,7 @@ export class EmailController {
   @Post('send')
   @ApiOperation({ summary: '发送邮箱验证码' })
   @Public()
-  @Throttle({ default: { limit: 2, ttl: 600000 } })
+  @Throttle({ default: { limit: 2, ttl: 600000 } }) // 接口节流
   async sendEmailCode(
     @Body() dto: SendEmailCodeDto,
     @Ip() ip: string,

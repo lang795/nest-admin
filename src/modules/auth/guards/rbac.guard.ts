@@ -12,6 +12,7 @@ import { AuthService } from '~/modules/auth/auth.service'
 
 import { ALLOW_ANON_KEY, PERMISSION_KEY, PUBLIC_KEY, Roles } from '../auth.constant'
 
+// 接口权限守卫
 @Injectable()
 export class RbacGuard implements CanActivate {
   constructor(
@@ -42,6 +43,7 @@ export class RbacGuard implements CanActivate {
     if (allowAnon)
       return true
 
+    // 获取接口权限配置信息
     const payloadPermission = this.reflector.getAllAndOverride<
       string | string[]
     >(PERMISSION_KEY, [context.getHandler(), context.getClass()])
@@ -54,11 +56,12 @@ export class RbacGuard implements CanActivate {
     if (user.roles.includes(Roles.ADMIN))
       return true
 
+    // 获取用户权限
     const allPermissions = await this.authService.getPermissionsCache(user.uid) ?? await this.authService.getPermissions(user.uid)
     // console.log(allPermissions)
     let canNext = false
 
-    // handle permission strings
+    // 处理权限字符串，判断是否有权限
     if (Array.isArray(payloadPermission)) {
       // 只要有一个权限满足即可
       canNext = payloadPermission.every(i => allPermissions.includes(i))

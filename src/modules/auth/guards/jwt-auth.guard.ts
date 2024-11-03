@@ -81,6 +81,7 @@ export class JwtAuthGuard extends AuthGuard(AuthStrategy.JWT) {
 
     let result: any = false
     try {
+      // 使用库方法，验证请求token是否有效
       result = await super.canActivate(context)
     }
     catch (err) {

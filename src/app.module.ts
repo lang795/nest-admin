@@ -31,6 +31,7 @@ import { SocketModule } from './socket/socket.module'
 
 @Module({
   imports: [
+    // config配置模块
     ConfigModule.forRoot({
       isGlobal: true, // 全局模块，其他模块不用再imports: [ConfigModule]来使用
       expandVariables: true, // 是否展开变量
@@ -53,17 +54,17 @@ import { SocketModule } from './socket/socket.module'
         },
       },
     }),
-    SharedModule,
-    DatabaseModule,
+    SharedModule, // 业务框架公共处理模块
+    DatabaseModule, // 数据库连接
 
-    AuthModule,
-    SystemModule,
-    TasksModule.forRoot(),
-    ToolsModule,
-    SocketModule,
-    HealthModule,
+    AuthModule, // 登录注册，身份认证
+    SystemModule, // 管理系统相关接口
+    TasksModule.forRoot(), // 定时任务相关服务的提供者，导出提供者别名的方式到全局
+    ToolsModule, // 存储 邮件 上传的模块
+    SocketModule, // socket服务 模块
+    HealthModule, // 系统健康检查
     SseModule,
-    NetdiskModule,
+    NetdiskModule, // 网盘模块
 
     // biz
 
@@ -74,14 +75,15 @@ import { SocketModule } from './socket/socket.module'
   providers: [
     { provide: APP_FILTER, useClass: AllExceptionsFilter },
 
+    // 应用拦截器，框架层接口都是使用APP_INTERCEPTOR拦截处理接口请求和返回的数据
     { provide: APP_INTERCEPTOR, useClass: ClassSerializerInterceptor },
-    { provide: APP_INTERCEPTOR, useClass: TransformInterceptor },
+    { provide: APP_INTERCEPTOR, useClass: TransformInterceptor }, // 统一处理接口请求与响应结果
     { provide: APP_INTERCEPTOR, useFactory: () => new TimeoutInterceptor(15 * 1000) },
     { provide: APP_INTERCEPTOR, useClass: IdempotenceInterceptor },
 
-    { provide: APP_GUARD, useClass: JwtAuthGuard },
-    { provide: APP_GUARD, useClass: RbacGuard },
-    { provide: APP_GUARD, useClass: ThrottlerGuard },
+    { provide: APP_GUARD, useClass: JwtAuthGuard }, // 所有接口的全局配置守卫
+    { provide: APP_GUARD, useClass: RbacGuard }, // 全局守卫，用于接口操作权限控制
+    { provide: APP_GUARD, useClass: ThrottlerGuard }, // 接口限流守卫
 
   ],
 })
